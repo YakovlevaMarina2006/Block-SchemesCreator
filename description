@@ -11,7 +11,8 @@ Block-Schemes Creator
         Scheme
         Block
     2) Алгоритмы:
-
+        Рисование стрелок
+        Сохранение
     3) Сторонние библиотеки:
         Tkinter
         
