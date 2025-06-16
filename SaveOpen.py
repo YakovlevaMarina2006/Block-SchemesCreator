@@ -20,6 +20,7 @@ def save_scheme(scheme):
             file.write(" ".join(map(str, scheme.get_arrows()[i])))
         file.write("\n")
 
+
 def open_scheme(canvas, window):
     filepath = filedialog.askopenfilename()
     scheme = None

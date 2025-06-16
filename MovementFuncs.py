@@ -1,5 +1,4 @@
 
-#from tkinter import *
 from main import CONTROL_PANEL_HEIGHT
 from DrawingFuncs import redraw_line
 

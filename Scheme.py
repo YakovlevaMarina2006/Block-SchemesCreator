@@ -1,7 +1,6 @@
 
-#from Block import *
+
 import Block as Block
-#import MovementFuncs as MF
 import DrawingFuncs as DF
 
 connection_started_flag = False

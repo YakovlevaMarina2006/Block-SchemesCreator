@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 import MovementFuncs as MF
-#from main import get_window_size
+
 
 class Block:
     def __init__(self, window, canvas, scheme, width, height, color, panel_color, text="", min_size=50):
@@ -70,7 +70,6 @@ class Block:
         self.block.destroy()
 
     def resize(self, x, y):
-        # widget = event.widget.master
         self.width += x
         self.width = max(self.width, self.min_size)
         self.height += y

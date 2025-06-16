@@ -1,9 +1,9 @@
 
-
+LINE_WIDTH = 2
 
 def draw_line(canvas, from_block, to_block):
     return canvas.create_line(from_block.get_position()["x"], from_block.get_position()["y"], \
-                       to_block.get_position()["x"], to_block.get_position()["y"], arrow="last")
+                       to_block.get_position()["x"], to_block.get_position()["y"], arrow="last", width=LINE_WIDTH)
 
 
 
