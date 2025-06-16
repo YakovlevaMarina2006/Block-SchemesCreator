@@ -4,9 +4,9 @@ import MovementFuncs as MF
 #from main import get_window_size
 
 class Block:
-    def __init__(self, canvas, scheme, width, height, color, panel_color, min_size=50):
-        self.x = 0
-        self.y = 0
+    def __init__(self, window, canvas, scheme, width, height, color, panel_color, min_size=50):
+        # self.x = 0
+        # self.y = 0
         self.scheme = scheme
         self.canvas = canvas
         self.width = width
@@ -14,22 +14,22 @@ class Block:
         self.color = color
         self.panel_color = panel_color
         self.min_size = min_size
+
         self.block = Frame(canvas, bg=self.color, width=self.width, height=self.height)
         self.panel = Frame(self.block, bg=self.panel_color, width=self.width, height=20)
         self.text_frame = Frame(self.block, bg="black", width=self.width, height=self.height - 20)
         self.text = ScrolledText(self.text_frame, bg=self.color, wrap="word")
         self.panel2 = Frame(self.block, bg=self.panel_color, width=self.width, height=20)
-        self.del_button = Button(self.panel, text="X", command=lambda: self.delete(self.canvas, self.scheme))
+
+        self.del_button = Button(self.panel, text="X", command=lambda: self.scheme.delete_block(self.canvas, self.scheme, self))
         self.resize_button = Button(self.panel2, text="⬊")
         self.make_lower_button = Button(self.panel, text="▽", command=lambda: self.make_lower())
         self.connect_button = Button(self.panel, text=".")
 
-    def put(self, master, x=0, y=0):
-        self.x = x
-        self.y = y
-        # global root
-        # a = get_window_size(master)
-        self.block.place(x=self.x, y=self.y)
+        self.make_dragable(window, scheme, canvas)
+        self.make_resizable()
+        self.make_connectable(canvas, scheme)
+
         for i in range(3): self.block.rowconfigure(index=i, weight=1)
 
         self.panel.grid(row=0, column=0, sticky="nsew")
@@ -50,9 +50,7 @@ class Block:
         self.text.grid(sticky="nsew")
 
     def place(self, x, y):
-        self.x = x
-        self.y = y
-        self.block.place(x=self.x, y=self.y)
+        self.block.place(x=x, y=y)
 
     def make_dragable(self, window, scheme, canvas):
         self.panel.bind('<Button-1>', lambda event: MF.dnd_start(event, self))
@@ -65,18 +63,10 @@ class Block:
         self.resize_button.bind('<B1-Motion>', lambda event: MF.resize_motion(event, self))
 
     def make_connectable(self, canvas, scheme):
-        self.connect_button.config(command=lambda : MF.draw_line(canvas, scheme, self))
+        self.connect_button.config(command=lambda : scheme.add_arrow(canvas, self))
 
-    def delete(self, canvas, scheme):
-        arrows = scheme.get_arrows()
-        j = scheme.find_block(self)
-        for i in range(scheme.get_size()):
-            MF.delete_arrow(canvas, scheme, arrows[i][j])
-            MF.delete_arrow(canvas, scheme, arrows[j][i])
-
-        scheme.delete_block(self)
+    def destroy(self):
         self.block.destroy()
-
 
     def resize(self, x, y):
         # widget = event.widget.master
@@ -87,13 +77,8 @@ class Block:
         self.text_frame.config(width=self.width)
         self.text_frame.config(height=self.height)
 
-    def move_to(self, x, y):
-        self.x = x
-        self.y = y
-        self.block.place(x=self.x, y=self.y)
-
     def get_position(self):
-        return {"x": self.x, "y": self.y}
+        return {"x": self.block.winfo_x(), "y": self.block.winfo_y()}
 
     def make_lower(self):
         self.block.lower()
