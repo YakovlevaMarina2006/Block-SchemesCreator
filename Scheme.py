@@ -9,6 +9,7 @@ class Scheme:
     def add_block(self, block):
         self.blocks.append(block)
         self.size += 1
+        print(self.blocks)
         for string in self.arrows:
             string.append(0)
         self.arrows.append([0 for i in range(self.size)])
@@ -27,3 +28,13 @@ class Scheme:
 
     def get_arrows(self):
         return self.arrows
+
+    def delete_arrow(self, from_block, to_block):
+        self.arrows[self.find_block(from_block)][self.find_block(to_block)] = 0
+
+    def delete_block(self, block):
+        self.arrows.pop(self.find_block(block))
+        for string in self.arrows:
+            string.pop(self.find_block(block))
+        self.blocks.remove(block)
+        self.size -= 1

@@ -46,10 +46,11 @@ from MovementFuncs import draw_line, control_panel_height
 #     block.resize_button.bind('<B1-Motion>', block.resize)
 
 def add_block(root, scheme, canvas):
-    new_block = Block(canvas, 100, 100, "pink", "red")
+    new_block = Block(canvas, scheme, 100, 100, "pink", "red")
     new_block.put(root, 100, 100)
     new_block.make_dragable(root, scheme, canvas)
     new_block.make_resizable()
+    new_block.make_connectable(canvas, scheme)
     scheme.add_block(new_block)
 
 
@@ -86,22 +87,22 @@ if __name__ == '__main__':
 
     scheme = Scheme()
 
-    block1 = Block(canvas, 300, 300, "pink", "red")
-    block1.put(root, 300, 300)
-    block1.make_dragable(root, scheme, canvas)
-    block1.make_resizable()
-    scheme.add_block(block1)
+    # block1 = Block(canvas, 300, 300, "pink", "red")
+    # block1.put(root, 300, 300)
+    # block1.make_dragable(root, scheme, canvas)
+    # block1.make_resizable()
+    # scheme.add_block(block1)
+    #
+    # block2 = Block(canvas, 200, 100, "light blue", "purple")
+    # block2.put(root, 100, 100)
+    # block2.make_dragable(root, scheme, canvas)
+    # block2.make_resizable()
+    # scheme.add_block(block2)
+    #
+    # block1.make_lower()
+    # block2.make_lower()
 
-    block2 = Block(canvas, 200, 100, "light blue", "purple")
-    block2.put(root, 100, 100)
-    block2.make_dragable(root, scheme, canvas)
-    block2.make_resizable()
-    scheme.add_block(block2)
-
-    block1.make_lower()
-    block2.make_lower()
-
-    draw_line(canvas, scheme, block2, block1)
+    # draw_line(canvas, scheme, block2, block1)
     #draw_line(canvas, scheme, block1, block2)
 
     # line1 = canvas.create_line(0, 0, 100, 100, 100, 200)

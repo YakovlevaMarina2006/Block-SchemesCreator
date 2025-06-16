@@ -4,22 +4,25 @@ import MovementFuncs as MF
 #from main import get_window_size
 
 class Block:
-    def __init__(self, master, width, height, color, panel_color, min_size=50):
+    def __init__(self, canvas, scheme, width, height, color, panel_color, min_size=50):
         self.x = 0
         self.y = 0
-        self.master = master
+        self.scheme = scheme
+        self.canvas = canvas
         self.width = width
         self.height = height
         self.color = color
         self.panel_color = panel_color
         self.min_size = min_size
-        self.block = Frame(master, bg=self.color, width=self.width, height=self.height)
+        self.block = Frame(canvas, bg=self.color, width=self.width, height=self.height)
         self.panel = Frame(self.block, bg=self.panel_color, width=self.width, height=20)
         self.text_frame = Frame(self.block, bg="black", width=self.width, height=self.height - 20)
         self.text = ScrolledText(self.text_frame, bg=self.color, wrap="word")
         self.panel2 = Frame(self.block, bg=self.panel_color, width=self.width, height=20)
-        self.del_button = Button(self.panel, text="X", command=lambda: self.delete())
+        self.del_button = Button(self.panel, text="X", command=lambda: self.delete(self.canvas, self.scheme))
         self.resize_button = Button(self.panel2, text="⬊")
+        self.make_lower_button = Button(self.panel, text="▽", command=lambda: self.make_lower())
+        self.connect_button = Button(self.panel, text=".")
 
     def put(self, master, x=0, y=0):
         self.x = x
@@ -33,7 +36,9 @@ class Block:
 
         self.panel2.grid(row=2, column=0, sticky="nsew")
 
-        self.del_button.pack(anchor="e")
+        self.del_button.pack(side="right", anchor="e")
+        self.make_lower_button.pack(side="right")
+        self.connect_button.pack(side="left")
 
         self.resize_button.pack(anchor="e")
 
@@ -59,9 +64,19 @@ class Block:
         self.resize_button.bind('<Button-1>', lambda event: MF.dnd_start(event, self))
         self.resize_button.bind('<B1-Motion>', lambda event: MF.resize_motion(event, self))
 
-    def delete(self):
-        #self.tk_obj.pack_forget()
+    def make_connectable(self, canvas, scheme):
+        self.connect_button.config(command=lambda : MF.draw_line(canvas, scheme, self))
+
+    def delete(self, canvas, scheme):
+        arrows = scheme.get_arrows()
+        j = scheme.find_block(self)
+        for i in range(scheme.get_size()):
+            MF.delete_arrow(canvas, scheme, arrows[i][j])
+            MF.delete_arrow(canvas, scheme, arrows[j][i])
+
+        scheme.delete_block(self)
         self.block.destroy()
+
 
     def resize(self, x, y):
         # widget = event.widget.master

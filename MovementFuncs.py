@@ -2,6 +2,9 @@
 from tkinter import *
 
 control_panel_height = 30
+flag = False
+from_block = None
+to_block = None
 
 def get_window_size(window):
     data = window.geometry()
@@ -41,12 +44,27 @@ def resize_motion(event, block):
     block.resize(x=-block.block.startX + event.x, y=-block.block.startY + event.y)
 
 
-def draw_line(canvas, scheme, from_block, to_block):
-    scheme.add_arrow(from_block, to_block, canvas.create_line(from_block.get_position()["x"], from_block.get_position()["y"], \
+def draw_line(canvas, scheme, block):
+    global flag
+    global from_block
+    global to_block
+    if not flag:
+        flag = True
+        from_block = block
+    else:
+        to_block = block
+        if scheme.get_arrow(from_block, to_block) != 0:
+            canvas.delete(scheme.get_arrow(from_block, to_block))
+        scheme.add_arrow(from_block, to_block, canvas.create_line(from_block.get_position()["x"], from_block.get_position()["y"], \
                          to_block.get_position()["x"], to_block.get_position()["y"], arrow="last"))
+        flag = False
 
 
 def redraw_line(canvas, line, from_block, to_block):
 
     canvas.coords(line, from_block.get_position()["x"], from_block.get_position()["y"], \
                                         to_block.get_position()["x"], to_block.get_position()["y"])
+
+
+def delete_arrow(canvas, scheme, arrow):
+    canvas.delete(arrow)
