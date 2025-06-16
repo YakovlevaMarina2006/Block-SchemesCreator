@@ -29,9 +29,9 @@ def dnd_motion(event, scheme, block, window, canvas):
     i = scheme.find_block(block)
     for j in range(scheme.get_size()):
         if scheme.arrows[i][j] != 0:
-            redraw_line(canvas, scheme.get_arrows()[i][j], block, scheme.blocks[j])
+            redraw_line(canvas, scheme.get_arrows()[i][j], block, scheme.get_blocks()[j])
         if scheme.arrows[j][i] != 0:
-            redraw_line(canvas, scheme.get_arrows()[j][i], scheme.blocks[j], block)
+            redraw_line(canvas, scheme.get_arrows()[j][i], scheme.get_blocks()[j], block)
 
 
 def resize_motion(event, block):
